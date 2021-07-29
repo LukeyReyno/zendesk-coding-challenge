@@ -3,3 +3,7 @@ This project is an entry for the Zendesk Student Co-op.
 This is used to connect to the Zendesk API and display all the Tickets connected to an account.
 
 ## Instructions
+* pip install coverage
+
+## Notes
+* Switched from Email and Token requests to OAUTH token for better security
