@@ -7,3 +7,4 @@ This is used to connect to the Zendesk API and display all the Tickets connected
 
 ## Notes
 * Switched from Email and Token requests to OAUTH token for better security
+* Organized project into different folders

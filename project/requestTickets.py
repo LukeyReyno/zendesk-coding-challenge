@@ -1,11 +1,11 @@
 import requests
 import json
+import zExceptions
 
-from zTicket import ZendeskTicket
-
-with open("API_Credentials.json") as credFile:
+with open("project/data/API_Credentials.json") as credFile:
     API_Creds = json.load(credFile)
 
+@zExceptions.handleExceptions
 def getTicketCount():
     """
     returns an integer value for the number of tickets with the associated account
@@ -17,13 +17,14 @@ def getTicketCount():
 
     return countDict['count']['value']
 
+@zExceptions.handleExceptions
 def getPageOfTickets(pageSize, url=None):
     """
     returns a json-encoded object of a page of Zendesk Tickets from the account
     
     pageSize in range of [1, 100]
     """
-    ticketList : list[ZendeskTicket] = []
+
     assert(1 <= pageSize <= 100)
     if url == None:
         url = f"https://{API_Creds['subdomain']}.zendesk.com/api/v2/tickets.json?page[size]={pageSize}"
@@ -32,6 +33,7 @@ def getPageOfTickets(pageSize, url=None):
     checkStatusCode(request.status_code)
     return request.json()
 
+@zExceptions.handleExceptions
 def getTicketsJSON():
     """
     returns the JSON for requesting all tickets in the account
@@ -42,6 +44,7 @@ def getTicketsJSON():
     checkStatusCode(request.status_code)
     return request.json()
 
+@zExceptions.handleExceptions
 def getTicketByID(tID : int):
     """
     returns a single Zendesk Ticket Object specified by ID
@@ -50,10 +53,9 @@ def getTicketByID(tID : int):
     request = requests.get(url, headers={"Authorization": f"Bearer {API_Creds['auth_token']}"})
 
     checkStatusCode(request.status_code)
-    ticketJson = request.json()
-
-    return ZendeskTicket(ticketJson['ticket'])
+    return request.json()
 
 def checkStatusCode(status_code):
-    if status_code != 200:
-        raise requests.HTTPError
+    # status code for receiving tickets
+    if status_code != requests.codes['\o/']: # 200
+        raise zExceptions.ZendeskAPIException

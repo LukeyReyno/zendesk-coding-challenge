@@ -1,4 +1,3 @@
-
 class ZendeskTicket():
     """
     Creates a Zendesk Ticket object provided dictionary data

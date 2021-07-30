@@ -2,14 +2,17 @@
 
 #test loop
 testNum=1
-for unittestFile in *Tests.py; do
+for unittestFile in project/tests/*Tests.py; do
 
     name=${unittestFile%.py}
     printf "TestFile #$testNum - $name:\n"
 
-    python3 -m coverage run $unittestFile
-    python3 -m coverage report -m
+    python3 -m coverage run -p $unittestFile -b
+    printf "\n\n"
 
     ((testNum++))
-    printf "\n\n\n"
 done
+
+# One final coverage report
+python3 -m coverage combine
+python3 -m coverage report -m
