@@ -56,6 +56,9 @@ def getTicketByID(tID : int):
     return request.json()
 
 def checkStatusCode(status_code):
-    # status code for receiving tickets
-    if status_code != requests.codes['\o/']: # 200
+    """
+    Checks the status code of Request to Zendesk
+    """
+    # status code for receiving tickets - 200
+    if status_code != requests.codes['\o/']:
         raise zExceptions.ZendeskAPIException

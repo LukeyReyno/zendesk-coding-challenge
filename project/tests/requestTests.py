@@ -5,7 +5,6 @@ import os
 cd = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(cd)
 sys.path.append(parent)
-
 import requestTickets, zExceptions
 
 class RequestTests(unittest.TestCase):

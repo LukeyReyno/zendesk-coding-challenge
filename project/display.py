@@ -1,4 +1,3 @@
-import sys
 import requestTickets
 
 from zTicket import ZendeskTicket
@@ -20,20 +19,24 @@ class Display():
 
     def __printWelcomeMessage(self):
         print("Welcome to the Zendesk Ticket Viewer\n"
-            "Program will now try to collect Ticket data\n"
-            "Connecting...\n")
+            "Program will now try to collect Ticket data\n")
 
     def __printInformation(self):
-        print("Type 'exit' to stop the program")
+        print("\nType 'exit' to stop the program")
         print("Type 'help' to show help menu\n")
         print(f"Total Number of Tickets: {self.totalTickets}")
-        print(f"Currently on page {self.currentPageIndex + 1} out of {self.numPages}\n")
+        print(f"Currently on page {self.currentPageIndex + 1} out of {self.numPages}")
 
     def __showInstructions(self):
         print("\n\tType 'exit' to stop the program")
         print("\tType 'help' to show this menu")
         print("\tType 'up' to view next page")
         print("\tType 'down' to view previous page")
+        print("\tType 'display' to view a preview of all tickets on the current page")
+        print("\tType a valid integer to get more details on a specific ticket")
+
+    def __exitMessage(self):
+        print("Thank you for using the Zendesk Ticket Viewer")
 
     def __loadNewPage(self, newPage):
         """
@@ -77,6 +80,15 @@ class Display():
             self.__loadNewPage(self.pages[self.currentPageIndex])
         print(f"Currently on page {self.currentPageIndex + 1} out of {self.numPages}")
 
+    def __handleSingleTicketView(self, tIndex: int):
+        page = self.pages[self.currentPageIndex]
+        if 0 < tIndex and tIndex <= len(page.tickets):
+            ticket : ZendeskTicket = page.tickets[tIndex - 1]
+            print(ticket.detailedView())
+        else:
+            print("Invalid Ticket Index\n"
+                "Type 'display' to see a list of tickets on this page.\n")
+
     def inputManager(self, userInput: str):
         # Maybe in future use new Python switch case
         if userInput == "help":
@@ -85,8 +97,12 @@ class Display():
             self.__scrollPage(1)
         elif userInput == "down":
             self.__scrollPage(-1)
+        elif userInput == "display":
+            self.pages[self.currentPageIndex].displayPage()
+        elif userInput.isdigit():
+            self.__handleSingleTicketView(int(userInput))
         elif userInput == "exit":
-            pass
+            self.__exitMessage()
         else:
             print("That is not a valid input. Type 'help' if necessary.")
 
@@ -97,7 +113,7 @@ class Display():
 
 class Page():
     """
-    Contains a list of Tickets, up to 25
+    Contains a list of Tickets, up to TICKETS_PER_PAGE
     """
     def __init__(self, pageNumber):
         self.tickets = []
@@ -115,3 +131,10 @@ class Page():
             self.numTickets = len(ticketsJson['tickets'])
             self.nextUrl = ticketsJson["links"]["next"]
             self.isLoaded = True
+
+    def displayPage(self):
+        ticketNum = 1
+        print(f"Currently Viewing Page #{self.pageNumber} Ticket Preview ---")
+        for t in self.tickets:
+            print(f"{ticketNum:2d}: {t}")
+            ticketNum += 1

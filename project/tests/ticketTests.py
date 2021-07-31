@@ -1,12 +1,6 @@
 import unittest
-import sys
-import os
 
-cd = os.path.dirname(os.path.realpath(__file__))
-parent = os.path.dirname(cd)
-sys.path.append(parent)
-
-from zTicket import ZendeskTicket
+from project.zTicket import ZendeskTicket
 
 # tests constructing the Zendesk Ticket object with a dict
 tDict = {
@@ -35,9 +29,19 @@ class TicketTests(unittest.TestCase):
         self.assertEqual(zT.requester_id, tDict['requester_id'])
         self.assertEqual(zT.subject, tDict['subject'])
 
+        # Date attribute gets formatted
+        self.assertNotEqual(zT.date, tDict["created_at"])
+        self.assertTrue(type(zT.date) == str)
+        self.assertTrue("at" in zT.date)
+
     def test_ticket_str(self):
         # tests the string version of Zendesk Ticket
-        self.assertEqual(str(zT)[:8], "Ticket #")
+        self.assertEqual(str(zT)[:3], "ID-")
+
+    def test_ticket_detailed_str(self):
+        string = zT.detailedView()
+        self.assertTrue(type(string) == str)
+        self.assertEqual(string[:8], "Ticket #")
 
     def test_ticket_eq01(self):
         #tests tickets equality method

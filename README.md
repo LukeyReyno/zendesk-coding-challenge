@@ -6,5 +6,5 @@ This is used to connect to the Zendesk API and display all the Tickets connected
 * pip install coverage
 
 ## Notes
-* Switched from Email and Token requests to OAUTH token for better security
+* Switched from Email and Token requests to OAUTH token with ['read'] scope for better security
 * Organized project into different folders
