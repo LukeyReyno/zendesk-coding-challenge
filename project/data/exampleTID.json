@@ -1,0 +1,51 @@
+{
+  "ticket": {
+    "url": "https://zcclreyna.zendesk.com/api/v2/tickets/2.json",
+    "id": 2,
+    "external_id": null,
+    "via": {
+      "channel": "api",
+      "source": {
+        "from": {},
+        "to": {},
+        "rel": null
+      }
+    },
+    "created_at": "2021-07-28T00:24:12Z",
+    "updated_at": "2021-07-28T00:24:12Z",
+    "type": null,
+    "subject": "velit eiusmod reprehenderit officia cupidatat",
+    "raw_subject": "velit eiusmod reprehenderit officia cupidatat",
+    "description": "Aute ex sunt culpa ex ea esse sint cupidatat aliqua ex consequat sit reprehenderit. Velit labore proident quis culpa ad duis adipisicing laboris voluptate velit incididunt minim consequat nulla. Laboris adipisicing reprehenderit minim tempor officia ullamco occaecat ut laborum.\n\nAliquip velit adipisicing exercitation irure aliqua qui. Commodo eu laborum cillum nostrud eu. Mollit duis qui non ea deserunt est est et officia ut excepteur Lorem pariatur deserunt.",
+    "priority": null,
+    "status": "open",
+    "recipient": null,
+    "requester_id": 1901028589305,
+    "submitter_id": 1901028589305,
+    "assignee_id": 1901028589305,
+    "organization_id": 1900007229945,
+    "group_id": 1900000201825,
+    "collaborator_ids": [],
+    "follower_ids": [],
+    "email_cc_ids": [],
+    "forum_topic_id": null,
+    "problem_id": null,
+    "has_incidents": false,
+    "is_public": true,
+    "due_at": null,
+    "tags": [
+      "est",
+      "incididunt",
+      "nisi"
+    ],
+    "custom_fields": [],
+    "satisfaction_rating": null,
+    "sharing_agreement_ids": [],
+    "fields": [],
+    "followup_ids": [],
+    "ticket_form_id": 1900000097105,
+    "brand_id": 1900000051965,
+    "allow_channelback": false,
+    "allow_attachments": true
+  }
+}

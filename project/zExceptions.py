@@ -9,8 +9,13 @@ def handleExceptions(func):
             try:
                 print("Requesting Information from Zendesk...")
                 return func(*args, **kwargs)
-            except (ZendeskAPIException, requests.ConnectionError, requests.HTTPError):
+            except ZendeskAPIException:
                 print("Zendesk Connection Error has occurred.\n"
+                    "Authorization Error\n" 
+                    "Program will now terminate.\n\n", flush=sys.stderr)
+                sys.exit(1)
+            except (requests.ConnectionError, requests.HTTPError):
+                print("Connection Error has occurred.\n"
                     "Check your connection to the Zendesk API and the provided credentials.\n" 
                     "Program will now terminate.\n\n", flush=sys.stderr)
                 sys.exit(1)

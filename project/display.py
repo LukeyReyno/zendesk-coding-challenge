@@ -32,6 +32,7 @@ class Display():
         print("\tType 'help' to show this menu")
         print("\tType 'up' to view next page")
         print("\tType 'down' to view previous page")
+        print("\tType 'origin' to return to page 1")
         print("\tType 'display' to view a preview of all tickets on the current page")
         print("\tType a valid integer to get more details on a specific ticket")
 
@@ -80,6 +81,10 @@ class Display():
             self.__loadNewPage(self.pages[self.currentPageIndex])
         print(f"Currently on page {self.currentPageIndex + 1} out of {self.numPages}")
 
+    def __returnToPageOne(self):
+        self.currentPageIndex = 0
+        print(f"Currently on page {self.currentPageIndex + 1} out of {self.numPages}")
+
     def __handleSingleTicketView(self, tIndex: int):
         page = self.pages[self.currentPageIndex]
         if 0 < tIndex and tIndex <= len(page.tickets):
@@ -97,6 +102,8 @@ class Display():
             self.__scrollPage(1)
         elif userInput == "down":
             self.__scrollPage(-1)
+        elif userInput == "origin":
+            self.__returnToPageOne()
         elif userInput == "display":
             self.pages[self.currentPageIndex].displayPage()
         elif userInput.isdigit():

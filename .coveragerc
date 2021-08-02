@@ -2,3 +2,4 @@
 omit = 
     # do not include any other python libraries
     */site-packages/*
+    */dist-packages/*

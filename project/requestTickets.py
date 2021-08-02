@@ -34,17 +34,6 @@ def getPageOfTickets(pageSize, url=None):
     return request.json()
 
 @zExceptions.handleExceptions
-def getTicketsJSON():
-    """
-    returns the JSON for requesting all tickets in the account
-    """
-    url = f"https://{API_Creds['subdomain']}.zendesk.com/api/v2/tickets.json"
-    request = requests.get(url, headers={"Authorization": f"Bearer {API_Creds['auth_token']}"})
-
-    checkStatusCode(request.status_code)
-    return request.json()
-
-@zExceptions.handleExceptions
 def getTicketByID(tID : int):
     """
     returns a single Zendesk Ticket Object specified by ID
