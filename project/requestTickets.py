@@ -2,16 +2,32 @@ import requests
 import json
 import zExceptions
 
-with open("project/data/API_Credentials.json") as credFile:
-    API_Creds = json.load(credFile)
+API_CRED_PATH = "project/data/API_Credentials.json"
+
+class Zendesk_API_Credentials():
+    """
+    Creates instance of API Credentials for requesting tickets
+    OAUTH scope needs 'read' capabilities
+
+    CredFile needs subdomain and oauth token 
+    """
+
+    def __init__(self, filePath):
+        # requires a valid file path with a specific json key
+        with open(filePath) as credFile:
+            credDict = json.load(credFile)
+        self.subdomain = credDict['subdomain']
+        self.token = credDict['auth_token']
+
+client = Zendesk_API_Credentials(API_CRED_PATH)
 
 @zExceptions.handleExceptions
 def getTicketCount():
     """
     returns an integer value for the number of tickets with the associated account
     """
-    url = f"https://{API_Creds['subdomain']}.zendesk.com/api/v2/tickets/count.json"
-    request = requests.get(url, headers={"Authorization": f"Bearer {API_Creds['auth_token']}"})
+    url = f"https://{client.subdomain}.zendesk.com/api/v2/tickets/count.json"
+    request = requests.get(url, headers={"Authorization": f"Bearer {client.token}"})
     checkStatusCode(request.status_code)
     countDict = request.json()
 
@@ -27,8 +43,8 @@ def getPageOfTickets(pageSize, url=None):
 
     assert(1 <= pageSize <= 100)
     if url == None:
-        url = f"https://{API_Creds['subdomain']}.zendesk.com/api/v2/tickets.json?page[size]={pageSize}"
-    request = requests.get(url, headers={"Authorization": f"Bearer {API_Creds['auth_token']}"})
+        url = f"https://{client.subdomain}.zendesk.com/api/v2/tickets.json?page[size]={pageSize}"
+    request = requests.get(url, headers={"Authorization": f"Bearer {client.token}"})
 
     checkStatusCode(request.status_code)
     return request.json()
@@ -38,8 +54,8 @@ def getTicketByID(tID : int):
     """
     returns a single Zendesk Ticket Object specified by ID
     """
-    url = f"https://{API_Creds['subdomain']}.zendesk.com/api/v2/tickets/{tID}.json"
-    request = requests.get(url, headers={"Authorization": f"Bearer {API_Creds['auth_token']}"})
+    url = f"https://{client.subdomain}.zendesk.com/api/v2/tickets/{tID}.json"
+    request = requests.get(url, headers={"Authorization": f"Bearer {client.token}"})
 
     checkStatusCode(request.status_code)
     return request.json()

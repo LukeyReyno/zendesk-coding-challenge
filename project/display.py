@@ -9,6 +9,9 @@ class Display():
     Contains information and methods to display tickets on the command line
     """
     def __init__(self):
+        """
+        Initializes Display object with attributes and CLI outputs
+        """
         self.__printWelcomeMessage()
         self.totalTickets = requestTickets.getTicketCount()
         self.numPages = (self.totalTickets // TICKETS_PER_PAGE) + 1
@@ -18,16 +21,25 @@ class Display():
         self.__printInformation()
 
     def __printWelcomeMessage(self):
+        """
+        Prints before data is collected
+        """
         print("Welcome to the Zendesk Ticket Viewer\n"
             "Program will now try to collect Ticket data\n")
 
     def __printInformation(self):
+        """
+        Prints right as user is ready to input
+        """
         print("\nType 'exit' to stop the program")
         print("Type 'help' to show help menu\n")
         print(f"Total Number of Tickets: {self.totalTickets}")
         print(f"Currently on page {self.currentPageIndex + 1} out of {self.numPages}")
 
     def __showInstructions(self):
+        """
+        Help screen for users
+        """
         print("\n\tType 'exit' to stop the program")
         print("\tType 'help' to show this menu")
         print("\tType 'up' to view next page")
@@ -37,6 +49,9 @@ class Display():
         print("\tType a valid integer to get more details on a specific ticket")
 
     def __exitMessage(self):
+        """
+        Exit message when user inputs 'exit'
+        """
         print("Thank you for using the Zendesk Ticket Viewer")
 
     def __loadNewPage(self, newPage):
@@ -64,6 +79,9 @@ class Display():
             self.pages.append(newPage)
     
     def __initializePageMinMaxID(self):
+        """
+        Calculates and sets the min and max ID on every page
+        """
         count = 0
         for i in range(0, self.numPages):
             self.pages[i].minTicketID = count + 1
@@ -73,6 +91,9 @@ class Display():
             self.pages[i].maxTicketID = count
 
     def __scrollPage(self, amount):
+        """
+        Way in which users can change the current page
+        """
         self.currentPageIndex += amount
         if not (0 <= self.currentPageIndex < self.numPages):
             self.currentPageIndex -= amount
@@ -82,10 +103,16 @@ class Display():
         print(f"Currently on page {self.currentPageIndex + 1} out of {self.numPages}")
 
     def __returnToPageOne(self):
+        """
+        Allows users to return to the already loaded first page
+        """
         self.currentPageIndex = 0
         print(f"Currently on page {self.currentPageIndex + 1} out of {self.numPages}")
 
     def __handleSingleTicketView(self, tIndex: int):
+        """
+        Checks integer, then displays detailed view on a valid ticket
+        """
         page = self.pages[self.currentPageIndex]
         if 0 < tIndex and tIndex <= len(page.tickets):
             ticket : ZendeskTicket = page.tickets[tIndex - 1]
@@ -95,7 +122,11 @@ class Display():
                 "Type 'display' to see a list of tickets on this page.\n")
 
     def inputManager(self, userInput: str):
-        # Maybe in future use new Python switch case
+        """
+        Handles user input
+
+        Maybe in future use new Python switch case
+        """
         if userInput == "help":
             self.__showInstructions()
         elif userInput == "up":
@@ -114,7 +145,10 @@ class Display():
             print("That is not a valid input. Type 'help' if necessary.")
 
     def printAllPageIDs(self):
-        # Mostly used for debugging
+        """
+        Prints all of the display's pages' min and max attributes
+        (Mostly used for debugging)
+        """
         for p in self.pages:
             print(f"Min: {p.minTicketID} - Max: {p.maxTicketID}")
 
@@ -130,7 +164,10 @@ class Page():
         self.isLoaded = False
 
     def loadPage(self, url):
-        # Only loads if tickets aren't already there
+        """
+        Requests ticket page information to load page
+        (Only loads if tickets aren't already there)
+        """
         if self.isLoaded == False:
             ticketsJson = requestTickets.getPageOfTickets(TICKETS_PER_PAGE, url)
             for ticketDict in ticketsJson['tickets']:
@@ -140,6 +177,9 @@ class Page():
             self.isLoaded = True
 
     def displayPage(self):
+        """
+        Prints a preview of all of the page's tickets
+        """
         ticketNum = 1
         print(f"Currently Viewing Page #{self.pageNumber} Ticket Preview ---")
         for t in self.tickets:

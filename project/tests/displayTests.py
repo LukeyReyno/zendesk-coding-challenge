@@ -3,6 +3,7 @@ import sys
 import os
 import json
 
+# Set up path for correct feature implementation
 cd = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(cd)
 sys.path.append(parent)
@@ -43,6 +44,7 @@ class DisplayTests(unittest.TestCase):
     """
 
     def test_create_display(self):
+        # tests newly instantiated display
         d = display.Display()
 
         self.assertTrue(type(d.totalTickets) == int)
