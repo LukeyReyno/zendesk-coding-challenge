@@ -11,7 +11,7 @@ class Zendesk_API_Credentials():
 
     CredFile needs subdomain and oauth token 
     """
-
+    @zExceptions.handleAPICredExceptions
     def __init__(self, filePath):
         # requires a valid file path with a specific json key
         with open(filePath) as credFile:
@@ -21,7 +21,7 @@ class Zendesk_API_Credentials():
 
 client = Zendesk_API_Credentials(API_CRED_PATH)
 
-@zExceptions.handleExceptions
+@zExceptions.handleRequestExceptions
 def getTicketCount():
     """
     returns an integer value for the number of tickets with the associated account
@@ -33,7 +33,7 @@ def getTicketCount():
 
     return countDict['count']['value']
 
-@zExceptions.handleExceptions
+@zExceptions.handleRequestExceptions
 def getPageOfTickets(pageSize, url=None):
     """
     returns a json-encoded object of a page of Zendesk Tickets from the account
@@ -49,7 +49,7 @@ def getPageOfTickets(pageSize, url=None):
     checkStatusCode(request.status_code)
     return request.json()
 
-@zExceptions.handleExceptions
+@zExceptions.handleRequestExceptions
 def getTicketByID(tID : int):
     """
     returns a single Zendesk Ticket Object specified by ID

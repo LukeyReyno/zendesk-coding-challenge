@@ -109,27 +109,54 @@ class RequestTests(unittest.TestCase):
         with self.assertRaises(zExceptions.ZendeskAPIException):
             requestTickets.checkStatusCode(199)
 
-    def test_check_exception_handler01(self):
+    def test_check_request_exception_handler01(self):
         # Tests exception handler with specific exceptions
-        @zExceptions.handleExceptions
+        @zExceptions.handleRequestExceptions
         def raiseZException():
             raise zExceptions.ZendeskAPIException
 
         with self.assertRaises(SystemExit):
             raiseZException()
 
-    def test_check_exception_handler02(self):
+    def test_check_request_exception_handler02(self):
         # Tests exception handler with specific exceptions
-        @zExceptions.handleExceptions
+        @zExceptions.handleRequestExceptions
         def raiseConnectionException():
             raise requests.ConnectionError
 
         with self.assertRaises(SystemExit):
             raiseConnectionException()
 
-    def test_check_exception_handler03(self):
+    def test_check_request_exception_handler03(self):
         # Tests exception handler with specific exceptions
-        @zExceptions.handleExceptions
+        @zExceptions.handleRequestExceptions
+        def raiseException():
+            raise Exception
+
+        with self.assertRaises(SystemExit):
+            raiseException()
+
+    def test_check_api_cred_exception_handler01(self):
+        # Tests exception handler with specific exceptions
+        @zExceptions.handleAPICredExceptions
+        def raiseKeyError():
+            raise KeyError
+
+        with self.assertRaises(SystemExit):
+            raiseKeyError()
+
+    def test_check_api_cred_exception_handler02(self):
+        # Tests exception handler with specific exceptions
+        @zExceptions.handleAPICredExceptions
+        def raiseFileNotFoundException():
+            raise FileNotFoundError
+
+        with self.assertRaises(SystemExit):
+            raiseFileNotFoundException()
+
+    def test_check_api_cred_exception_handler03(self):
+        # Tests exception handler with specific exceptions
+        @zExceptions.handleAPICredExceptions
         def raiseException():
             raise Exception
 
