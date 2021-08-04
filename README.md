@@ -15,9 +15,13 @@ Users could change ```projects/data/API_Credentials.json``` to fit their OAUTH c
 
 ```git clone https://github.com/LukeyReyno/zendesk-coding-challenge.git```
 
+Make the cloned directory the current working directory
+
+```cd zendesk-coding-challenge```
+
 ```bash runProgram.sh```
 
-~Internet Connection required
+~ Internet Connection required for intended use
 
 Running the program script will start the Zendesk Ticket Reader.
 * Users can scroll through the pages by inputting 'up' or 'down'
@@ -30,6 +34,10 @@ The Python Coverage library needs to be installed in order to run the testing sc
 
 ```pip install coverage```
 
+If not already, make the cloned directory the current working directory
+
+```cd zendesk-coding-challenge```
+
 ```bash runTests.sh```
 
 This should show every test passing with 100% coverage.
@@ -40,3 +48,5 @@ This should show every test passing with 100% coverage.
     + Removed Email, Password, and Token access to API, only OAUTH Client (since it can be deleted later)
 * Organized project into different folders for better user experience
 * Tested on Mac OS X and Linux through several Python 3.8 versions. (Should work on most python 3 distributions)
+* The shell scripts expect the cloned directory to be the current working directory
+    + This could be modified later
