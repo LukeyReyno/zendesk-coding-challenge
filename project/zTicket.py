@@ -1,69 +1,44 @@
 import datetime
-import sys
 
-def ticketErrorHandler(func):
-    """
-    catches errors for missing keys
-    """
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except (KeyError, TypeError):
-            print("Zendesk Ticket Instantiation Error has occurred.\n", flush=sys.stderr)
-        except Exception as e:
-            print("Unchecked Ticket Error has occurred.\n"
-                "Program will now terminate.\n\n", flush=sys.stderr)
-            print(e)
-            sys.exit(1)
-    return inner
+NEEDED_KEYS = ('id', 'subject', 'description', 'requester_id', 'status', 'tags', 'created_at')
 
 class ZendeskTicket():
     """
     Creates a Zendesk Ticket object provided dictionary data
     """
 
-    def __init__(self, ticketDict):
+    def __init__(self, ticketDict: dict):
         self.ticketDict = ticketDict
-        self.__setAttrToNone()
-        self.__createAttrFromDict()
+        self.__dict__ = ticketDict
+        self.__fixDict()
+        self.__setDate()
 
     def __str__(self):
-        return f"ID-{self.id:03d}\t\"{self.subject}\" by {self.requester_id} on {self.date}"
+        try:
+            return f"ID-{self.id:03d}\t\"{self.subject}\" by {self.requester_id} on {self.date}"
+        except:
+            return "Ticket Has Attribute Errors"
 
     def __eq__(self, other):
         return type(self) == type(other) and \
             self.id == other.id and self.subject == other.subject and \
             self.date == other.date and self.status == other.status
 
-    def __setAttrToNone(self):
-        """
-        In case an error occurs, remainding attributes will result in None
-        """
-        self.id = None
-        self.subject = None
-        self.description = None
-        self.requester_id = None
-        self.status = None
-        self.tags = None
-        self.date = None
+    def __fixDict(self):
+        # Forces keys to exist to prevent AttributeErrors
+        for key in NEEDED_KEYS:
+            if key not in self.__dict__:
+                self.__dict__[key] = None
 
-    @ticketErrorHandler
-    def __createAttrFromDict(self):
-        """
-        creates ticket attributes from dictionary
-        """
-        # Maybe find another way to convert a dict object to attributes
-        self.id = self.ticketDict['id']
-        self.subject = self.ticketDict['subject']
-        self.description = self.ticketDict['description']
-        self.requester_id = self.ticketDict['requester_id']
-        self.status = self.ticketDict['status']
-        self.tags = self.ticketDict['tags']
-        
+    def __setDate(self):
         # Date Formatting
-        dateStr = self.ticketDict['created_at'].strip('Z')
-        date = datetime.datetime.fromisoformat(dateStr)
-        self.date = date.strftime("%d %B, %Y at %H:%M:%S")
+        try:
+            dateStr = self.created_at.strip('Z')
+            date = datetime.datetime.fromisoformat(dateStr)
+            self.date = date.strftime("%d %B, %Y at %H:%M:%S")
+        except:
+            # In case date is formatted incorrectly
+            self.date = self.created_at
 
     def detailedView(self):
         """

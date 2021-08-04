@@ -1,16 +1,22 @@
 import unittest
 import json
 
-from project.zTicket import ZendeskTicket, ticketErrorHandler
+from project.zTicket import ZendeskTicket
 
 # tests constructing the Zendesk Ticket object with a dict
 with open("project/data/exampleTID.json", "r") as JSON_FILE:
     tDict = json.load(JSON_FILE)
 
-tDict = tDict['ticket'] # One Ticket JSON
-zT = ZendeskTicket(tDict)
-zT2 = ZendeskTicket(tDict)
+with open("project/data/exampleTID.json", "r") as JSON_FILE:
+    tDict2 = json.load(JSON_FILE)
 
+tDict = tDict['ticket'] # One Ticket JSON
+tDict2 = tDict2['ticket']
+zT = ZendeskTicket(tDict)
+zT2 = ZendeskTicket(tDict2)
+
+# To test invalid dictionary
+zT3 = ZendeskTicket({})
 
 class TicketTests(unittest.TestCase):
     """
@@ -32,9 +38,23 @@ class TicketTests(unittest.TestCase):
         self.assertTrue(type(zT.date) == str)
         self.assertTrue("at" in zT.date)
 
-    def test_ticket_str(self):
+    def test_ticket_attributes_02(self):
+        # tests that the dict entries are all None with improper dict
+        self.assertEqual(zT3.id, None)
+        self.assertEqual(zT3.description, None)
+        self.assertEqual(zT3.requester_id, None)
+        self.assertEqual(zT3.subject, None)
+        self.assertEqual(zT3.tags, None)
+        self.assertEqual(zT3.status, None)
+        self.assertNotEqual(zT.date, None)
+
+    def test_ticket_str01(self):
         # tests the string version of Zendesk Ticket
         self.assertEqual(str(zT)[:3], "ID-")
+
+    def test_ticket_str02(self):
+        # tests the string version of Zendesk Ticket
+        self.assertEqual(str(zT3), "Ticket Has Attribute Errors")
 
     def test_ticket_detailed_str(self):
         # makes sure the correct string is returned
@@ -48,44 +68,13 @@ class TicketTests(unittest.TestCase):
     
     def test_ticket_eq02(self):
         #tests tickets equality method
-        zT2.id = 8
+        zT2.id = -1
         self.assertNotEqual(zT, zT2)
 
     def test_ticket_eq03(self):
         ls = []
         #tests tickets equality method
         self.assertNotEqual(zT, ls)
-
-    def test_error_handler01(self):
-        # Tests the error handler with an invalid dict
-        zTError = ZendeskTicket({})
-
-        self.assertEqual(zTError.id, None)
-        self.assertEqual(zTError.description, None)
-        self.assertEqual(zTError.requester_id, None)
-        self.assertEqual(zTError.subject, None)
-        self.assertEqual(zTError.tags, None)
-        self.assertEqual(zTError.status, None)
-
-    def test_error_handler02(self):
-        # Tests the error handler with an invalid type
-        zTError = ZendeskTicket("invalid")
-
-        self.assertEqual(zTError.id, None)
-        self.assertEqual(zTError.description, None)
-        self.assertEqual(zTError.requester_id, None)
-        self.assertEqual(zTError.subject, None)
-        self.assertEqual(zTError.tags, None)
-        self.assertEqual(zTError.status, None)
-
-    def test_error_handler03(self):
-        # Tests exception handler with specific exceptions
-        @ticketErrorHandler
-        def raiseException():
-            raise Exception
-
-        with self.assertRaises(SystemExit):
-            raiseException()
 
 if __name__ == '__main__': 
     unittest.main()
